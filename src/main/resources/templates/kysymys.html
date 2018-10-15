@@ -1,0 +1,58 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <title>Harjoitustyö - Kysymyspankki</title>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="../styles.css" />
+    </head>
+
+    
+    <body>
+        
+        <h1 th:text="${kysymys.kysymysteksti}"></h1>
+        Kurssi: 
+        <span th:text="${kysymys.kurssi}"></span><br/>
+        Aihe:
+        <span th:text="${kysymys.aihe}"></span><br/>
+        <h3>Vastausvaihtoehdot:</h3>
+        <p th:unless="${maara}">Tehtävälle ei ole lisätty vastausvaihtoehtoja.</p>
+        <p th:if="${oikea} AND ${maara} != 0">Varoitus: Tehtävälle ei ole lisätty vielä yhtään oikeaa vastausta.</p>
+        <p th:if="${kaikkioikein} AND ${maara} != 0">Varoitus: Kaikki vastausvaihtoehdot ovat oikeita vastauksia.</p>
+        <ol>
+            <li th:each="vastaus : ${vastaukset}">
+                <span th:text="${vastaus.vastausteksti}"></span>
+                <strong>
+                    <span th:if="${vastaus.oikein}" th:text="Oikein."></span>
+                    <span th:unless="${vastaus.oikein}" th:text="Väärin."></span>
+                </strong>
+                    <form method="POST" th:action="@{~/poistavastaus/{id}(id=${vastaus.id})}">
+                        <input type="hidden" name="kysymysid" th:value="${kysymys.id}" />
+                        <input type="submit" value="Poista" />
+                    </form>
+            </li>    
+        </ol>
+        
+        
+        <h2>Lisää uusi vastausvaihtoehto</h2>
+        
+        <form method="POST" th:action="@{~/lisaavastaus/{id}(id=${kysymys.id})}">
+            Vastausteksti:<br/>
+            <input type="text" name="vastausteksti" required="" oninvalid="this.setCustomValidity('Anna vastaukselle teksti')"
+                   oninput="this.setCustomValidity('')"/><br/>
+
+            Rastita, jos vastausvaihtoehto on oikea vastaus:
+            <input type="checkbox" name="oikein" /><br/>
+            <input type="submit" value="Lisää vastausvaihtoehto"/>
+        </form>
+        <br/>
+        <p>Navigointi:</p>
+        <ul>
+            <li><a href="../#alku">Palaa alkuun</a></li>
+            <li><a href="../#tarkastele">Tarkastele kysymyksiä ja niiden vastausvaihtoehtoja</a></li>
+            <li><a href="../#lisaa">Siirry lisäämään uusi kysymys</a></li>
+        </ul>
+        
+    </body>
+</html>
+

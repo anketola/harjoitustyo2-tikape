@@ -1,0 +1,13 @@
+body {
+    color: #333;
+    font-family: 'Helvetica', 'Arial', Sans-serif;
+}
+
+h1 {
+    color: #212121;
+}
+
+h2 {
+    color: #212121;
+    text-transform: uppercase;
+}

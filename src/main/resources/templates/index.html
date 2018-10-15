@@ -1,0 +1,75 @@
+<!DOCTYPE html SYSTEM "http://www.thymeleaf.org/dtd/xhtml1-strict-thymeleaf-4.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+    <head>
+        <title>Harjoitustyö - Kysymyspankki</title>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="styles.css" />
+    </head>
+
+    <body>
+
+        <h1><a id ="alku"></a>Kysymyspankki</h1>
+        <p>Tervetuloa kysymyspankkiin. Kysymyspankki tarjoaa sinulle seuraavat toiminnallisuudet:</p>
+        
+        <ul>
+            <li>Kysymysten lisääminen ja poistaminen.</li>
+            <li>Vastausvaihtoehtojen lisääminen ja poistaminen kysymyksiin.</li>
+            <li>Kysymysten katsominen (näyttää kysymyksen tiedot ja vastausvaihtoehdot).</li>
+            <li>Kysymysten listaaminen.</li>
+        </ul>
+        
+        <p>Kysymysten määrä pankissa yhteensä: <span th:text="${maara}"></span></p>
+        <p>Navigointi:</p>
+        
+        <ul>
+            <li><a href="#tarkastele">Tarkastele kysymyksiä ja niiden vastausvaihtoehtoja</a></li>
+            <li><a href="#lisaa">Siirry lisäämään uusi kysymys</a></li>
+        </ul>
+        
+        <h2><a id="tarkastele"></a>Tallennetut kysymykset</h2>
+        <p>Jos haluat tarkastella, lisätä tai poistaa vastausvaihtoehtoja, klikkaa yksittäistä kysymystä.</p>
+        <p>Poistaaksesi kysymyksen kokonaan paina kysymyksen alla sijaitsevaa "Poista"-nappia. Jos haluat lisätä uuden kysymyksen, paina <a href="#lisaa">tästä</a>.</p>
+        <h3 th:unless="${maara}">Kysymyspankkiin ei ole lisätty kysymyksiä.</h3>
+        
+        <ul>
+            <li th:each="kysymys : ${kysymykset}">
+                
+                <a th:href="@{~/vastauksia/{id}(id=${kysymys.id})}">
+                    <span th:text="${kysymys.kysymysteksti}"></span>
+                </a>
+                <ul>
+                    <li>Kurssi: <span th:text="${kysymys.kurssi}"></span></li>
+                    <li>Aihe: <span th:text="${kysymys.aihe}"></span></li>
+                </ul>   
+                    <form method="POST" th:action=@{~/poistakysymys/{id}(id=${kysymys.id})}>
+                        <input type="submit" value="Poista" />
+                    </form>
+                    <br />
+            
+            </li>
+        </ul>
+        
+        <h2><a id="lisaa"></a>Lisää uusi kysymys</h2>
+        
+        <form method="POST" action="/lisaakysymys">
+            Kurssi:<br/>
+            <input type="text" name="kurssi" required oninvalid="this.setCustomValidity('Syötä kurssin nimi')"
+                   oninput="this.setCustomValidity('')" /><br/>
+            Aihe:<br/>
+            <input type="text" name="aihe" required oninvalid="this.setCustomValidity('Anna kysymykselle aihe')"
+                   oninput="this.setCustomValidity('')"/><br/>
+            Kysymysteksti:<br/>
+            <input type="text" name="kysymysteksti" required oninvalid="this.setCustomValidity('Syötä kysymyksen teksti')"
+                   oninput="this.setCustomValidity('')"/><br/>
+            <input type="submit" value="Lisää kysymys"/>
+        </form>
+        
+        <p>Navigointi:</p>
+        <ul>
+            <li><a href="#alku">Palaa sivuun alkuun</a></li>
+            <li><a href="#tarkastele">Tarkastele kysymyksiä</a></li>
+        </ul>
+    
+    </body>
+</html>
